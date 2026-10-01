@@ -1,11 +1,55 @@
-<!doctype html><html lang="uk"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Touch CRM</title>
-<link rel="apple-touch-icon" sizes="180x180" href="./touch-crm-icon.png">
-<link rel="icon" type="image/png" href="./touch-crm-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Touch CRM">
+<meta name="description" content="CRM дитячого центру Touch">
 <meta name="theme-color" content="#ffffff">
-<style>*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f7fbff;color:#173a5e}body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}main{width:min(100%,390px);padding:34px 24px;text-align:center;background:#fff;border:1px solid #e7eef5;border-radius:28px;box-shadow:0 14px 45px rgba(28,65,98,.12)}img{width:150px;height:150px;object-fit:contain;border-radius:30px}h1{margin:20px 0 8px;font-size:30px}p{margin:0 0 26px;color:#64798d}a{display:block;padding:15px 18px;border-radius:16px;background:#2779c7;color:#fff;text-decoration:none;font-size:17px;font-weight:800}small{display:block;margin-top:16px;color:#8ba0b2}</style>
-</head><body><main><img src="./touch-crm-icon.png" alt="Touch CRM"><h1>Touch CRM</h1><p>CRM дитячого центру</p><a href="https://script.google.com/macros/s/AKfycby4SaZ3mSpmfYXba9WdXnv0DRrFZkvBVE0MpIbOGKIrK-XpPIl7yyd4eBG5q7gc5utH/exec">Відкрити CRM</a><small>Додайте цю сторінку на початковий екран iPhone.</small></main></body></html>
+<meta name="application-name" content="Touch CRM">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Touch CRM">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<style>
+*{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f7fbff;color:#173a5e}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+main{width:min(100%,410px);padding:34px 24px;text-align:center;background:#fff;border:1px solid #e7eef5;border-radius:28px;box-shadow:0 14px 45px rgba(28,65,98,.12)}
+.logo{width:150px;height:150px;object-fit:contain;border-radius:30px}
+h1{margin:18px 0 6px;font-size:30px} p{margin:0 0 24px;color:#64798d}
+.btn{display:block;width:100%;border:0;padding:15px 18px;border-radius:16px;background:#2779c7;color:#fff;text-decoration:none;font-size:17px;font-weight:800;cursor:pointer}
+.install{margin-top:12px;background:#fff;color:#2779c7;border:1px solid #bfd9ee}
+small{display:block;margin-top:16px;color:#8ba0b2;line-height:1.4}
+</style>
+</head>
+<body>
+<main>
+<img class="logo" src="./icon-192.png" alt="Touch CRM">
+<h1>Touch CRM</h1>
+<p>CRM дитячого центру</p>
+<a class="btn" href="https://script.google.com/macros/s/AKfycby4SaZ3mSpmfYXba9WdXnv0DRrFZkvBVE0MpIbOGKIrK-XpPIl7yyd4eBG5q7gc5utH/exec">Відкрити CRM</a>
+<button class="btn install" id="installBtn" hidden>Встановити Touch CRM</button>
+<small id="hint">На iPhone/iPad: Safari → Поділитися → На початковий екран.</small>
+</main>
+<script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js');
+let deferredPrompt=null;
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredPrompt=e; installBtn.hidden=false;
+});
+installBtn.addEventListener('click',async()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt=null; installBtn.hidden=true;
+});
+window.addEventListener('appinstalled',()=>{installBtn.hidden=true;});
+const ua=navigator.userAgent.toLowerCase();
+if(ua.includes('android')) document.getElementById('hint').textContent='Android: натисніть «Встановити Touch CRM» або меню Chrome → Встановити застосунок.';
+else if(ua.includes('windows')) document.getElementById('hint').textContent='Windows: натисніть «Встановити Touch CRM» або значок встановлення в Chrome/Edge.';
+else if(ua.includes('macintosh') && !('ontouchend' in document)) document.getElementById('hint').textContent='Mac: відкрийте цю сторінку у Safari або Chrome та додайте/встановіть вебзастосунок.';
+</script>
+</body></html>
