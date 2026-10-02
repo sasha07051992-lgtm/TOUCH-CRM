@@ -51,4 +51,40 @@ if(ua.includes('android')) document.getElementById('hint').textContent='Android:
 else if(ua.includes('windows')) document.getElementById('hint').textContent='Windows: натисніть «Встановити Touch CRM» або значок встановлення в Chrome/Edge.';
 else if(ua.includes('macintosh') && !('ontouchend' in document)) document.getElementById('hint').textContent='Mac: відкрийте цю сторінку у Safari або Chrome та додайте/встановіть вебзастосунок.';
 </script>
+  <!-- Touch CRM iPhone stable-device fix v82.
+     Insert this block immediately BEFORE </body> in the GitHub Pages index.html. -->
+<script>
+(function () {
+  var STORAGE_KEY = 'touchCRMLauncherDeviceV1';
+  var CRM_URL = 'https://script.google.com/macros/s/AKfycbyaWVX-tjn8XI1wZtzMGHe816pggK9bSDRcKs4q99YpAxk8oedoVUtq5RDxugv4nX1c/exec';
+
+  function makeId() {
+    var bytes = new Uint8Array(24);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes).map(function (b) {
+      return b.toString(16).padStart(2, '0');
+    }).join('');
+  }
+
+  var deviceId = '';
+  try {
+    deviceId = localStorage.getItem(STORAGE_KEY) || '';
+    if (!/^[A-Za-z0-9_-]{20,160}$/.test(deviceId)) {
+      deviceId = makeId();
+      localStorage.setItem(STORAGE_KEY, deviceId);
+    }
+  } catch (e) {
+    deviceId = makeId();
+  }
+
+  var crmHref = CRM_URL + '?crm_device=' + encodeURIComponent(deviceId);
+
+  var button = document.querySelector('a.btn');
+  if (button) {
+    button.href = crmHref;
+  }
+})();
+</script>
+</body>
+</html>
 </body></html>
