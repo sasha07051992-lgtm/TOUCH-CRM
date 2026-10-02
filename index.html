@@ -34,7 +34,6 @@ small{display:block;margin-top:16px;color:#8ba0b2;line-height:1.4}
 <small id="hint">На iPhone/iPad: Safari → Поділитися → На початковий екран.</small>
 </main>
 <script>
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js');
 let deferredPrompt=null;
 const installBtn=document.getElementById('installBtn');
 window.addEventListener('beforeinstallprompt',e=>{
